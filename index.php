@@ -1,16 +1,11 @@
 <?php
 require "core/init.php";
 
-$user = DB::getInstance()->get('users', array('username','=', 'diaa'));
+$user = DB::getInstance()->update('users',2,[
 
-if(!$user->count()){
+    'username' => 'newinsert',
+    'password' => 'new password'
 
-    echo 'error';
-}else{
+]);
 
-   foreach ($user->results() as $result){
-
-       echo $result->username;
-   }
-}
 

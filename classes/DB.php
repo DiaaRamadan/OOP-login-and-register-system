@@ -28,7 +28,7 @@ class DB{
         return self::$_instance;
     }
 
-    public function query($sql, $params = array('diaa')){
+    public function query($sql, $params = array()){
         $this->_error = false;
         if($this->_query = $this->_Pdo->prepare($sql)){
             if(count($params)){
@@ -78,6 +78,44 @@ class DB{
 
     public function delete($table, $where){
         return $this->action("delete", $table, $where);
+    }
+
+    public function insert($table, $fields = array()){
+
+        $keys = array_keys($fields);
+        $values = null;
+        $count = 1;
+        foreach($fields as $field){
+            $values .='?';
+            if($count < count($fields)){
+                $values .= ',';
+            }
+            $count++;
+        }
+        $sql = "INSERT INTO $table (`".implode('`,`', $keys)."`) VALUES({$values})";
+        if(!$this->query($sql, $fields)->error()){
+            return true;
+        }
+        return false;
+    }
+
+    public function update($table, $id, $fields = array()){
+        $set =" ";
+        $count = 1;
+        foreach ($fields as $key => $value){
+            $set .=$key.'=?';
+            if($count < count($fields)){
+                $set .=',';
+            }
+            $count++;
+        }
+
+        $sql = "UPDATE {$table} SET {$set} WHERE id = {$id}";
+        if (!$this->query($sql, $fields)->error()){
+            return true;
+        }
+        return false;
+
     }
 
     public function error(){
