@@ -1,11 +1,8 @@
 <?php
 require "core/init.php";
 
-$user = DB::getInstance()->update('users',2,[
-
-    'username' => 'newinsert',
-    'password' => 'new password'
-
-]);
+if (Session::exist('home')){
+    echo "<p>". Session::flash('home')."</p>";
+}
 
 
